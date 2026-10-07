@@ -19,6 +19,15 @@ fastcomp restore   # puts everything back exactly as it was
 Run `apply`/`restore` as Administrator (Windows) or root (Linux) for the settings that need it;
 anything that can't be changed is reported, not hidden.
 
+## Free up disk space
+```
+fastcomp space         # dry run: shows how much is reclaimable
+fastcomp space --yes   # deletes it
+```
+Only deletes temp files, caches and trash older than 7 days that you own. It can't create
+new capacity, it recovers space already wasted; the amount varies per PC (10 GB is common
+on long-used machines, not guaranteed). Documents and downloads are never touched.
+
 ## What it changes
 | OS | performance (plugged in) | battery |
 |----|--------------------------|---------|
