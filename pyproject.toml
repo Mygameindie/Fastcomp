@@ -1,0 +1,16 @@
+[project]
+name = "fastcomp"
+version = "0.1.0"
+description = "Reversible performance + battery tuning for Windows, Linux and macOS (no quality or resource reduction)"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+fastcomp = "fastcomp.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["fastcomp"]
