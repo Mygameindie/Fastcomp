@@ -1,0 +1,56 @@
+name: Build standalone executables
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            asset: fastcomp-windows.exe
+          - os: ubuntu-22.04
+            asset: fastcomp-linux
+          - os: macos-latest
+            asset: fastcomp-macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyinstaller pytest .
+      - run: pytest
+      - name: Build
+        shell: bash
+        run: |
+          pyinstaller --onefile --name fastcomp --collect-submodules fastcomp packaging/entry.py
+          if [ -f dist/fastcomp.exe ]; then mv dist/fastcomp.exe "dist/${{ matrix.asset }}"; else mv dist/fastcomp "dist/${{ matrix.asset }}"; fi
+      - name: Smoke test
+        shell: bash
+        run: |
+          "dist/${{ matrix.asset }}" --help
+          "dist/${{ matrix.asset }}" plan
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: dist/${{ matrix.asset }}
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*

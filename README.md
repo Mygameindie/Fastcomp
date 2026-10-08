@@ -5,6 +5,14 @@ background overhead and wasted power, on Windows, Linux and macOS. It never lowe
 resolution, graphics quality, CPU/GPU capacity or any other resource.
 
 ## Install
+**No Python needed:** download the file for your OS from the
+[Releases page](https://github.com/mygameindie/fastcomp/releases)
+(`fastcomp-windows.exe`, `fastcomp-macos` or `fastcomp-linux`) and run it from a terminal,
+e.g. `fastcomp-windows.exe plan`. On macOS/Linux, first run `chmod +x fastcomp-*`.
+Unsigned builds: Windows SmartScreen may warn ("More info" → "Run anyway"), and on macOS
+right-click → Open the first time.
+
+**With Python 3.9+:**
 ```
 pip install git+https://github.com/mygameindie/fastcomp
 ```
@@ -45,7 +53,9 @@ on long-used machines, not guaranteed). Documents and downloads are never touche
 
 ## Develop
 ```
-pip install pytest && pytest
+pip install pytest . && pytest
 ```
+Releases: pushing a tag like `v0.1.0` makes `.github/workflows/build.yml` build the three
+standalone executables with PyInstaller and attach them to a GitHub release.
 Every change goes through `core.apply`, which records the first original value of each
 setting in `~/.fastcomp/state.json` so `restore` is always exact.
