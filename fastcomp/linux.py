@@ -15,7 +15,7 @@ def _file_setting(path: Path, desc: str, target: str, root: Path) -> Setting:
         if v is not None:
             path.write_text(v)
 
-    return Setting(str(path.relative_to(root)), desc, read, write, target, admin=True)
+    return Setting(path.relative_to(root).as_posix(), desc, read, write, target, admin=True)
 
 
 def settings(profile: str, root: Path = Path("/")) -> List[Setting]:
